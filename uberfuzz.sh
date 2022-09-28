@@ -23,13 +23,13 @@ do
 		((i++))
 done
 #load previously chosen theme
-export FZF_DEFAULT_OPTS="$(cat $HOME/commands/uberfuzz/current_theme.txt)"
+export FZF_DEFAULT_OPTS="$(cat $HOME/.config/uberfuzz/current_theme.txt)"
 #define background and foreground color for kitty
-export BACKGROUNDCOLOR="$(cat $HOME/commands/uberfuzz/current_theme.txt|sed 's/^.*,bg://;s/,.*$//')"
-#FOREGROUNDCOLOR="$(cat $HOME/commands/uberfuzz/current_theme.txt|sed 's/^.*,fg://;s/,.*$//')"
+export BACKGROUNDCOLOR="$(cat $HOME/.config/uberfuzz/current_theme.txt|sed 's/^.*,bg://;s/,.*$//')"
+#FOREGROUNDCOLOR="$(cat $HOME/.config/uberfuzz/current_theme.txt|sed 's/^.*,fg://;s/,.*$//')"
 #kitty @ set-colors background="$BACKGROUNDCOLOR" #foreground="$FOREGROUNDCOLOR"
 #write 3 welcome lines to log.txt
-echo -e "$(date +%A\ %e\ %B\ %T)""\nWelcome to the FuzzyFinder File Manager\nNeed Help? Press ctrl - h">>$HOME/commands/uberfuzz/log.txt
+echo -e "$(date +%A\ %e\ %B\ %T)""\nWelcome to the FuzzyFinder File Manager\nNeed Help? Press ctrl - h">>$HOME/git/uberfuzz/log.txt
 #zeroing FUNCTIONTIME
 FUNCTIONTIME=0
 function draw_line(){
@@ -87,11 +87,11 @@ function draw_preview {
 
 }
 function draw_icon {
- if [ ! -e $HOME/.cache/uberfuzz/icons/"$BACKGROUNDCOLOR"/ ]
+ if [ ! -e $HOME/.cache/uberfuzz/icons/$BACKGROUNDCOLOR/ ]
  then
-		mkdir $HOME/.cache/uberfuzz/icons/"$BACKGROUNDCOLOR"/
+		mkdir $HOME/.cache/uberfuzz/icons/$BACKGROUNDCOLOR/
 	fi
- if [ ! -e $HOME/.cache/uberfuzz/icons/"$BACKGROUNDCOLOR"/"$5" ]
+ if [ ! -e $HOME/.cache/uberfuzz/icons/$BACKGROUNDCOLOR/"$5" ]
  then
  	if [ -e $HOME/.cache/uberfuzz/prefer/$5 ]
  	then
@@ -103,7 +103,7 @@ function draw_icon {
 				echo -e " $5 not found.\n Place prefered icon\nin $HOME/.cache/uberfuzz/icons/prefer/,\n named $5"
 			fi
 		fi
- convert -thumbnail 256 "$LOCATED_ICON" -background "$BACKGROUNDCOLOR" -flatten $HOME/.cache/uberfuzz/icons/"$BACKGROUNDCOLOR"/"$5";
+ convert -thumbnail 256 "$LOCATED_ICON" -background "$BACKGROUNDCOLOR" -flatten $HOME/.cache/uberfuzz/icons/$BACKGROUNDCOLOR/"$5";
  fi
 
     >"${UEBERZUG_FIFO}" declare -A -p cmd=( \
@@ -148,7 +148,7 @@ cd
 	;then X="$(( (( "$FZF_PREVIEW_COLUMNS" * 7/10 )) - (( "$FZF_PREVIEW_COLUMNS" * 3/10 )) + 7 ))";Y="2";MAXW="39";MAXH="12";boximg \
 	;fi \
 	;draw_line ╭ 43 ╯Log╰╮ \
-	;cat $HOME/commands/uberfuzz/log.txt|tail -$LOGLINES|fillout \
+	;cat $HOME/git/uberfuzz/log.txt|tail -$LOGLINES|fillout \
 	; draw_line ╰ 43 ┬─────────┬╯ \
 	; if [[ -d {} ]] \
 	; then draw_icon $X $Y $MAXW $MAXH /folder.png && draw_line ╭ 43 ╯Selection╰╮ \
@@ -211,19 +211,19 @@ cd
 	#========================== NAME OF FILE OR DIRECTORY ===============================
 	PP="$(echo "$P"|tail +2)"
 	#========================== MULTI SELECTION =========================================
-	echo "$P">$HOME/commands/uberfuzz/P.txt
-	echo "$PP">$HOME/commands/uberfuzz/PP.txt
+	echo "$P">$HOME/git/uberfuzz/P.txt
+	echo "$PP">$HOME/git/uberfuzz/PP.txt
 	TOTAL="$(echo "$PP"|wc -l)"
 	i=1
 	while [ $i -le $TOTAL ]
 	do
 	#======================= IMPORTANT =================================================
-				LINE="$(cat $HOME/commands/uberfuzz/PP.txt|head -$i|tail +$i)"
+				LINE="$(cat $HOME/git/uberfuzz/PP.txt|head -$i|tail +$i)"
 	#======================= DIRECTORY PARSING =========================================
 				if [[ -d "$LINE" ]] &&  [[ "$(echo "$P"|head -1)" = "" ]]
 				then
 					cd "$LINE"
-					echo "MOVED to ""$PWD">>$HOME/commands/uberfuzz/log.txt
+					echo "MOVED to ""$PWD">>$HOME/git/uberfuzz/log.txt
 				fi
 				#==================== FILE PARSING ==============================================
 				if [[ -f "$LINE" ]]
@@ -233,9 +233,9 @@ cd
 					if [ $EXTENSION = txt ] || [ -z $EXTENSION ] || [ $EXTENSION = sh ] || [ $EXTENSION = css ] || [ $EXTENSION = json ] || [ $EXTENSION = md ] || [ $EXTENSION = xml ]
 					then
 						case $(echo "$P"|head -1) in
-						 "${V[_OPEN-WITH_]}")				APP="$(grep "_TEXT_APP" $HOME/.config/uberfuzz/uberfuzz.conf|awk '{print $2}'|fzf	--layout=reverse	 --height=100% 	--preview-window=40%:noborder --preview='Y="3";MAXW=$(("$FZF_PREVIEW_COLUMNS"/2)); MAXH=$(("$FZF_PREVIEW_COLUMNS"/2)) ;X=$(("$FZF_PREVIEW_COLUMNS"*10/6));draw_icon $X $Y $MAXW $MAXH {}.png'	--border -i --prompt="Open with: ")";	echo "Opened "$LINE" with "$APP"">>$HOME/commands/uberfuzz/log.txt;	"$APP" "$LINE"
+						 "${V[_OPEN-WITH_]}")				APP="$(grep "_TEXT_APP" $HOME/.config/uberfuzz/uberfuzz.conf|awk '{print $2}'|fzf	--layout=reverse	 --height=100% 	--preview-window=40%:noborder --preview='Y="3";MAXW=$(("$FZF_PREVIEW_COLUMNS"/2)); MAXH=$(("$FZF_PREVIEW_COLUMNS"/2)) ;X=$(("$FZF_PREVIEW_COLUMNS"*10/6));draw_icon $X $Y $MAXW $MAXH {}.png'	--border -i --prompt="Open with: ")";	echo "Opened "$LINE" with "$APP"">>$HOME/git/uberfuzz/log.txt;	"$APP" "$LINE"
 						 ;;
-						 "")	eval ${V[_DEFAULTTEXT_APP_]} "$LINE" &	echo "Opened "$LINE" with "${V[_DEFAULTTEXT_APP_]}"">>$HOME/commands/uberfuzz/log.txt
+						 "")	eval ${V[_DEFAULTTEXT_APP_]} "$LINE" &	echo "Opened "$LINE" with "${V[_DEFAULTTEXT_APP_]}"">>$HOME/git/uberfuzz/log.txt
 						 ;;
 						esac
 					elif [ $EXTENSION = wav ]||[ $EXTENSION = mp3 ]||[ $EXTENSION = m3u ]||[ $EXTENSION = flac ]||[ $EXTENSION = opus ]||[ $EXTENSION = best ]||[ $EXTENSION = aac ]||[ $EXTENSION = ogg ]||[ $EXTENSION = midi ]||[ $EXTENSION = m4a ]||[ $EXTENSION = WAV ]||[ $EXTENSION = mpeg3 ]||[ $EXTENSION = m4b ]
@@ -245,13 +245,13 @@ cd
 							APP="$(grep "_MEDIA_APP" $HOME/.config/uberfuzz/uberfuzz.conf|awk '{print $2}'|fzf	--layout=reverse	 --height=100% 	--preview-window=40%:noborder --preview='Y="3";MAXW=$(("$FZF_PREVIEW_COLUMNS"/2)); MAXH=$(("$FZF_PREVIEW_COLUMNS"/2)) ;X=$(("$FZF_PREVIEW_COLUMNS"*10/6));  draw_icon $X $Y $MAXW $MAXH {}.png'	--border -i --prompt="Open with: ")"
 							finalise
 							"$APP" "$LINE"
-							echo "Opened "$LINE" with "$APP"">>$HOME/commands/uberfuzz/log.txt
+							echo "Opened "$LINE" with "$APP"">>$HOME/git/uberfuzz/log.txt
 						elif [[ "$(echo "$P"|head -1)" = "" ]]
 						then
 							finalise
 							cat $HOME/.config/uberfuzz/audio_shortcuts.txt
 							${V[_DEFAUDIO_APP_]} "$LINE"
-							echo "Opened "$LINE" with "${V[_DEFAUDIO_APP_]}"">>$HOME/commands/uberfuzz/log.txt
+							echo "Opened "$LINE" with "${V[_DEFAUDIO_APP_]}"">>$HOME/git/uberfuzz/log.txt
 						fi
 
 					elif [ $EXTENSION = mpeg ]||[ $EXTENSION = mp4 ]||[ $EXTENSION = flv ]||[ $EXTENSION = webm ]||[ $EXTENSION = mkv ]||[ $EXTENSION = avi ]||[ $EXTENSION = mov ]||[ $EXTENSION = wmv ]||[ $EXTENSION = ape ]||[ $EXTENSION = mpg ]||[ $EXTENSION = 3gp ]
@@ -260,13 +260,13 @@ cd
 						then
 							APP="$(grep "_MEDIA_APP" $HOME/.config/uberfuzz/uberfuzz.conf|awk '{print $2}'|fzf	--layout=reverse	 --height=100% 	--preview-window=40%:noborder --preview='Y="3";MAXW=$(("$FZF_PREVIEW_COLUMNS"/2)); MAXH=$(("$FZF_PREVIEW_COLUMNS"/2)) ;X=$(("$FZF_PREVIEW_COLUMNS"*10/6)); draw_icon $X $Y $MAXW $MAXH {}.png'	--border -i --prompt="Open with: ")"
 							"$APP" "$LINE"
-							echo "Opened "$LINE" with "$APP"">>$HOME/commands/uberfuzz/log.txt
+							echo "Opened "$LINE" with "$APP"">>$HOME/git/uberfuzz/log.txt
 						elif [[ "$(echo "$P"|head -1)" = "" ]]
 						then
 							finalise
 							cat $HOME/.config/uberfuzz/video_shortcuts.txt
 							${V[_DEFVIDEO_APP_]} "$LINE"
-							echo "Opened "$LINE" with "${V[_DEFVIDEO_APP_]}"">>$HOME/commands/uberfuzz/log.txt
+							echo "Opened "$LINE" with "${V[_DEFVIDEO_APP_]}"">>$HOME/git/uberfuzz/log.txt
 						fi
 
 					elif [ $EXTENSION = png ]||[ $EXTENSION = gif ]||[ $EXTENSION = jpg ]||[ $EXTENSION = jpeg ]||[ $EXTENSION = svg ]||[ $EXTENSION = JPG ]||[ $EXTENSION = JPEG ]
@@ -274,10 +274,10 @@ cd
 						case "$(echo "$P"|head -1)" in
 						"${V[_OPEN-WITH_]}" )	APP="$(grep "_IMAGE_APP" $HOME/.config/uberfuzz/uberfuzz.conf|awk '{print $2}'|fzf	--layout=reverse	 --height=100% 	--preview-window=40%:noborder --preview='Y="3";MAXW=$(("$FZF_PREVIEW_COLUMNS"/2)); MAXH=$(("$FZF_PREVIEW_COLUMNS"/2)) ;X=$(("$FZF_PREVIEW_COLUMNS"*10/6));draw_icon $X $Y $MAXW $MAXH {}.png'	--border -i --prompt="Open with: ")"
 							eval "$APP" "$LINE" &
-							echo "Opened "$LINE" with "$APP"">>$HOME/commands/uberfuzz/log.txt
+							echo "Opened "$LINE" with "$APP"">>$HOME/git/uberfuzz/log.txt
 							;;
 						"" )	eval "${V[_DEFIMAGE_APP_]}" '"$LINE"'
-							echo "Opened "$LINE" with "${V[_DEFIMAGE_APP_]}"">>$HOME/commands/uberfuzz/log.txt
+							echo "Opened "$LINE" with "${V[_DEFIMAGE_APP_]}"">>$HOME/git/uberfuzz/log.txt
 						;;
 					esac
 					elif [ $EXTENSION = xcf ]
@@ -285,45 +285,45 @@ cd
 						if [[ "$(echo "$P"|head -1)" = "" ]]
 						then
 								gimp "$LINE" &
-								echo "Opened "$LINE" with gimp">>$HOME/commands/uberfuzz/log.txt
+								echo "Opened "$LINE" with gimp">>$HOME/git/uberfuzz/log.txt
 						fi
 					elif [ $EXTENSION = srt ]
 					then
 						if [[ "$(echo "$P"|head -1)" = "" ]]
 						then
 								eval ${V[_SUB_EDITOR_]} "$LINE" &
-								echo "Opened "$LINE" with "${V[_SUB_EDITOR_]}"">>$HOME/commands/uberfuzz/log.txt
+								echo "Opened "$LINE" with "${V[_SUB_EDITOR_]}"">>$HOME/git/uberfuzz/log.txt
 						fi
 					elif [ $EXTENSION = doc ]||[ $EXTENSION = docx ]||[ $EXTENSION = odt ]||[ $EXTENSION = abw ]||[ $EXTENSION = ods ]||[ $EXTENSION = xls ]||[ $EXTENSION = xlsx ]||[ $EXTENSION = ppt ]||[ $EXTENSION = pptx ]||[ $EXTENSION = pps ]||[ $EXTENSION = ppsx ]||[ $EXTENSION = odp ]||[ $EXTENSION = rtf ]
 					then
 						if [[ "$(echo "$P"|head -1)" = "" ]]
 						then
-								eval ${V[_DEF_OFFICE_]} "$LINE" &
-								echo "Opened "$LINE" with "${V[_DEF_OFFICE_]}"">>$HOME/commands/uberfuzz/log.txt
+								eval "${V[_DEF_OFFICE_]}" "'$LINE'" &
+								echo "Opened "$LINE" with "${V[_DEF_OFFICE_]}"">>$HOME/git/uberfuzz/log.txt
 						fi
 					elif [ $EXTENSION = pdf ]||[ $EXTENSION = epub ]
 					then
 						if [[ "$(echo "$P"|head -1)" = "" ]]
 						then
-								eval ${V[_DEF_PDF_]} '"$LINE"' &
-								echo "Opened "$LINE" with "${V[_DEF_PDF_]}"">>$HOME/commands/uberfuzz/log.txt
+								eval ${V[_DEF_PDF_]} "'$LINE'" &
+								echo "Opened "$LINE" with "${V[_DEF_PDF_]}"">>$HOME/git/uberfuzz/log.txt
 						fi
 					elif [ $EXTENSION = html ]
 					then
 						if [[ "$(echo "$P"|head -1)" == "${V[_OPEN-WITH_]}" ]]
 						then
 							APP="$(grep "_BROWSER" $HOME/.config/uberfuzz/uberfuzz.conf|awk '{print $2}'|fzf	--layout=reverse	 --height=100% 	--preview-window=40%:noborder --preview='Y="3";MAXW=$(("$FZF_PREVIEW_COLUMNS"/2)); MAXH=$(("$FZF_PREVIEW_COLUMNS"/2)) ;X=$(("$FZF_PREVIEW_COLUMNS"*10/6)); draw_icon $X $Y $MAXW $MAXH {}.png'	--border -i --prompt="Open with: ")"
-							echo "Opened "$LINE" with "$APP""	>>$HOME/commands/uberfuzz/log.txt
+							echo "Opened "$LINE" with "$APP""	>>$HOME/git/uberfuzz/log.txt
 							eval "$APP" "$LINE"&
 						elif [[ "$(echo "$P"|head -1)" = "" ]]
 						then
 								"${V[_DBROWSER_]}" "$LINE"
-								echo "Opened "$LINE" with "${V[_DBROWSER_]}"">>$HOME/commands/uberfuzz/log.txt
+								echo "Opened "$LINE" with "${V[_DBROWSER_]}"">>$HOME/git/uberfuzz/log.txt
 						fi
 					elif 	[[ "$(echo "$P"|head -1)" = "" ]]
 					then
-						APP="$(ls /usr/share/|fzf	--layout=reverse	 --height=100% 	--preview-window=40%:noborder --preview='Y="3";MAXW=$(("$FZF_PREVIEW_COLUMNS"/2)); MAXH=$(("$FZF_PREVIEW_COLUMNS"/2)) ;X=$(("$FZF_PREVIEW_COLUMNS"*10/6)); draw_icon $X $Y $MAXW $MAXH gnome-system.png'	--border -i --prompt="Open with: ")"
-							echo "Opened "$LINE" with "$APP""	>>$HOME/commands/uberfuzz/log.txt
+						APP="$(ls /usr/share/|fzf	--layout=reverse	 --height=100% 	--preview-window=40%:noborder --preview='Y="3";MAXW=$(("$FZF_PREVIEW_COLUMNS"/2)); MAXH=$(("$FZF_PREVIEW_COLUMNS"/2)) ;X=$(("$FZF_PREVIEW_COLUMNS"*10/6)); draw_icon $X $Y $MAXW $MAXH system.png'	--border -i --prompt="Open with: ")"
+							echo "Opened "$LINE" with "$APP""	>>$HOME/git/uberfuzz/log.txt
 							 "$APP" "$LINE"
 					fi
 				fi
@@ -334,20 +334,20 @@ cd
 							"${V[_COPY_]}")	if [ $TIMESTAMP != $FUNCTIONTIME ]
 							then
 								#ERASE CUT.txt contents
-								sed -i 'd' $HOME/commands/uberfuzz/CUT.txt
+								sed -i 'd' $HOME/git/uberfuzz/CUT.txt
 								#ERASE COPY.txt CONTENTS
-								sed -i 'd' $HOME/commands/uberfuzz/COPY.txt
+								sed -i 'd' $HOME/git/uberfuzz/COPY.txt
 								FUNCTIONTIME=$TIMESTAMP
 							fi
 							#make sure neither . nor .. are parsed
 							if [ "$LINE" != "." ] && [ "$LINE" != ".." ] && [ "$LINE" != "" ]
 							then
 								#write "$LINE" to COPY.txt
-								echo "$(realpath "$LINE")">>$HOME/commands/uberfuzz/COPY.txt
+								echo "$(realpath "$LINE")">>$HOME/git/uberfuzz/COPY.txt
 								#write to log.txt
-								echo "COPY :""$LINE">>$HOME/commands/uberfuzz/log.txt
+								echo "COPY :""$LINE">>$HOME/git/uberfuzz/log.txt
 							else
-								echo "ABORT: Cannot copy '.' '..' or ''">>$HOME/commands/uberfuzz/log.txt
+								echo "ABORT: Cannot copy '.' '..' or ''">>$HOME/git/uberfuzz/log.txt
 							fi
 							;;
 
@@ -362,22 +362,22 @@ cd
 
 												then
 													LINE="$PWD"
-													echo "LINE=""$LINE">>$HOME/commands/uberfuzz/log.txt
+													echo "LINE=""$LINE">>$HOME/git/uberfuzz/log.txt
 												fi
 												if [ "$LINE" = ".." ]
 												then
 													LINE="$(dirname "$PWD")"
-													echo "LINE=""$LINE">>$HOME/commands/uberfuzz/log.txt
+													echo "LINE=""$LINE">>$HOME/git/uberfuzz/log.txt
 												fi
 												#check if COPY.txt is not empty
-												if [ "$(cat $HOME/commands/uberfuzz/COPY.txt|wc -l)" != 0 ]
+												if [ "$(cat $HOME/git/uberfuzz/COPY.txt|wc -l)" != 0 ]
 												then
 														#parse COPY.txt contents
-														COPYLINES="$(cat $HOME/commands/uberfuzz/COPY.txt|wc -l)"
+														COPYLINES="$(cat $HOME/git/uberfuzz/COPY.txt|wc -l)"
 														s=1
 														while [ $s -le "$COPYLINES" ]
 														do
-																COPIED="$(cat $HOME/commands/uberfuzz/COPY.txt|head -$s|tail +$s)"
+																COPIED="$(cat $HOME/git/uberfuzz/COPY.txt|head -$s|tail +$s)"
 																#again make sure no "." ".." "" are parsed
 																if [ "$COPIED" != "." ] && [ "$COPIED" != ".." ] && [ "$COPIED" != "" ]
 																then
@@ -391,21 +391,21 @@ cd
 																			((f++))
 																		done
 																		cp -r "$COPIED" "$LINE""/""$PASTED"|while [ "$(ls -s --block-size=K "$LINE""/""$PASTED"|sed 's/K.*$//g')"  -lt "$(ls -s --block-size=K "$COPIED"|sed 's/K.*$//g')" ] ; do M0="$(ls -s --block-size=M "$LINE""/""$PASTED"|awk '{print $1}'|sed 's/M.*$//g')";sleep 2;M1="$(ls -s --block-size=M "$LINE""/""$PASTED"|sed 's/M.*$//g')";echo -e -n "Copied  "$(ls -s --block-size=M "$LINE""/""$PASTED"|awk '{print $1}')" of "$(ls -s --block-size=M "$COPIED"|awk '{print $1}')   "$(( ($M1 - $M0) / 2 ))" M/sec "\r "; ((n++));done;echo "*Copied "$COPIED"."
-																		echo "PASTED "$PASTED" to "$LINE"">>$HOME/commands/uberfuzz/log.txt
+																		echo "PASTED "$PASTED" to "$LINE"">>$HOME/git/uberfuzz/log.txt
 																else
-																		echo "ABORT: Cannot paste '.' '..' or ''">>$HOME/commands/uberfuzz/log.txt
+																		echo "ABORT: Cannot paste '.' '..' or ''">>$HOME/git/uberfuzz/log.txt
 																fi
 																((s++))
 														done
-												elif [ "$(cat $HOME/commands/uberfuzz/CUT.txt|wc -l)" != 0 ]
+												elif [ "$(cat $HOME/git/uberfuzz/CUT.txt|wc -l)" != 0 ]
 												then
 														#parse CUT.txt
-														CUTLINES="$(cat $HOME/commands/uberfuzz/CUT.txt|wc -l)"
+														CUTLINES="$(cat $HOME/git/uberfuzz/CUT.txt|wc -l)"
 														s=1
 														while [ $s -le "$CUTLINES" ]
 														do
 
-																CUT="$(cat $HOME/commands/uberfuzz/CUT.txt|head -$s|tail +$s)"
+																CUT="$(cat $HOME/git/uberfuzz/CUT.txt|head -$s|tail +$s)"
 
 																#again make sure no "." ".." "" are parsed
 																if [ "$CUT" != "." ] && [ "$CUT" != ".." ] && [ "$CUT" != "" ]
@@ -422,20 +422,20 @@ cd
 																		done
 																		mv "$CUT" "$LINE""/""$PASTED"
 																		#copy copied address to COPY.txt (for future copying)
-																		echo "$(realpath	"$LINE")""/""$PASTED">>$HOME/commands/uberfuzz/COPY.txt
+																		echo "$(realpath	"$LINE")""/""$PASTED">>$HOME/git/uberfuzz/COPY.txt
 
-																		echo "PASTED "$PASTED" to "$LINE"">>$HOME/commands/uberfuzz/log.txt
+																		echo "PASTED "$PASTED" to "$LINE"">>$HOME/git/uberfuzz/log.txt
 																else
-																		echo "ABORT: Cannot paste '.' '..' or ''.">>$HOME/commands/uberfuzz/log.txt
+																		echo "ABORT: Cannot paste '.' '..' or ''.">>$HOME/git/uberfuzz/log.txt
 																fi
 																((s++))
 														done
 														#erase CUT.txt content (already copied to COPY.txt)
-														sed -i 'd' $HOME/commands/uberfuzz/CUT.txt
+														sed -i 'd' $HOME/git/uberfuzz/CUT.txt
 												fi
 
 										else
-										 echo "Cannot paste to ""$LINE"". It's a file">>$HOME/commands/uberfuzz/log.txt
+										 echo "Cannot paste to ""$LINE"". It's a file">>$HOME/git/uberfuzz/log.txt
 										fi
 										;;
 
@@ -443,9 +443,9 @@ cd
 						"${V[_CUT_]}")		#specify if LINE belongs to the same selection with the previous LINE
 							if [ $TIMESTAMP != $FUNCTIONTIME ]
 							then
-								sed -i 'd' $HOME/commands/uberfuzz/CUT.txt
+								sed -i 'd' $HOME/git/uberfuzz/CUT.txt
 								#ERASE CLIP CONTENTS
-								sed -i 'd' $HOME/commands/uberfuzz/COPY.txt
+								sed -i 'd' $HOME/git/uberfuzz/COPY.txt
 								FUNCTIONTIME=$TIMESTAMP
 							fi
 
@@ -453,11 +453,11 @@ cd
 							if [ "$LINE" != "." ] && [ "$LINE" != ".." ] && [ "$LINE" != "" ]
 							then
 								#write "$LINE" to CUT.txt
-								echo "$(realpath "$LINE")">>$HOME/commands/uberfuzz/CUT.txt
+								echo "$(realpath "$LINE")">>$HOME/git/uberfuzz/CUT.txt
 								#write to log.txt
-								echo "CUT :""$LINE">>$HOME/commands/uberfuzz/log.txt
+								echo "CUT :""$LINE">>$HOME/git/uberfuzz/log.txt
 							else
-								echo "ABORT: Cannot cut '.' '..' or ''">>$HOME/commands/uberfuzz/log.txt
+								echo "ABORT: Cannot cut '.' '..' or ''">>$HOME/git/uberfuzz/log.txt
 							fi
 							;;
 						#================== DEFINING DELETE function ctrl-d ==============================
@@ -474,7 +474,7 @@ cd
 												mv -v $HOME/.local/share/Trash/files/"$LINE" $HOME/.local/share/Trash/files/"$LINE"_$RANDOM
 											fi
 											mv -v "$LINE" $HOME/.local/share/Trash/files/
-										echo "DELETED ""$LINE">>$HOME/commands/uberfuzz/log.txt
+										echo "DELETED ""$LINE">>$HOME/git/uberfuzz/log.txt
 									else
 										echo "ABORT: Attempted to delete invalid file('.', '..' or '')"
 									fi
@@ -497,16 +497,16 @@ cd
 
 												if [ -e "$NEWNAME" ]
 												then
-													echo "ABORTED: Name already exists.">>$HOME/commands/uberfuzz/log.txt
+													echo "ABORTED: Name already exists.">>$HOME/git/uberfuzz/log.txt
 												else
 													mv "$LINE" "$NEWNAME"
-													echo "RENAMED "$LINE"  as " "$NEWNAME">>$HOME/commands/uberfuzz/log.txt
+													echo "RENAMED "$LINE"  as " "$NEWNAME">>$HOME/git/uberfuzz/log.txt
 												fi
 											else
-											echo "RENAME ABORTED.Invalid name.">>$HOME/commands/uberfuzz/log.txt
+											echo "RENAME ABORTED.Invalid name.">>$HOME/git/uberfuzz/log.txt
 											fi
 									else
-										echo "ABORTED, Invalid name.">>$HOME/commands/uberfuzz/log.txt
+										echo "ABORTED, Invalid name.">>$HOME/git/uberfuzz/log.txt
 									fi
 								fi
 								;;
@@ -534,7 +534,7 @@ cd
 
 									((TRASHLINENUMBER++))
 								done
-								echo "TRASH EMPTIED.">>$HOME/commands/uberfuzz/log.txt
+								echo "TRASH EMPTIED.">>$HOME/git/uberfuzz/log.txt
 							fi
 							;;
 
@@ -542,14 +542,14 @@ cd
 						"${V[_COPY-NAME_]}" )
 							if [ "$LINE" != "." ] && [ "$LINE" != ".." ] && [ "$LINE" != "" ]
 							then
-								echo "$LINE">$HOME/commands/uberfuzz/COPYNAME.txt
-								echo "COPIED name of ""$LINE">>$HOME/commands/uberfuzz/log.txt
+								echo "$LINE">$HOME/git/uberfuzz/COPYNAME.txt
+								echo "COPIED name of ""$LINE">>$HOME/git/uberfuzz/log.txt
 							else
-								echo "ABORTED: Invalid Name.">>$HOME/commands/uberfuzz/log.txt
+								echo "ABORTED: Invalid Name.">>$HOME/git/uberfuzz/log.txt
 							fi
 							;;
 						#================= DEFINING PASTE NAME function ctrl-u ====================================
-						"${V[_PASTE-NAME_]}" )NEWNAME="$(cat $HOME/commands/uberfuzz/COPYNAME.txt|head -1)"
+						"${V[_PASTE-NAME_]}" )NEWNAME="$(cat $HOME/git/uberfuzz/COPYNAME.txt|head -1)"
 							if [ "$NEWNAME" != "." ] && [ "$NEWNAME" != ".." ] && [ "$NEWNAME" != "" ] && [ "$LINE" != "." ] && [ "$LINE" != ".." ] && [ "$LINE" != "" ]
 							then
 								if [ -e "$NEWNAME" ]
@@ -558,111 +558,111 @@ cd
 									#if file already exists, rename it as "copy of"
 									while [ -f "$NEWNAME" ] || [ -d "$NEWNAME" ]
 									do
-											NEWNAME="$f"-"$(cat $HOME/commands/uberfuzz/COPYNAME.txt|head -1)"
+											NEWNAME="$f"-"$(cat $HOME/git/uberfuzz/COPYNAME.txt|head -1)"
 											((f++))
 									done
 								fi
 								mv "$LINE" "$NEWNAME"
-								echo "RENAMED "$LINE" as ""$NEWNAME"	>>$HOME/commands/uberfuzz/log.txt
+								echo "RENAMED "$LINE" as ""$NEWNAME"	>>$HOME/git/uberfuzz/log.txt
 							else
-								echo "ABORTED: Improper Name or file/directory.">>$HOME/commands/uberfuzz/log.txt
+								echo "ABORTED: Improper Name or file/directory.">>$HOME/git/uberfuzz/log.txt
 							fi
 							;;
 						#================= DEFINING MAKE NEW FILE ctrl-n =================================
 						"${V[_CREATE-N-FILE_]}" )	read -p "Enter name of new file :" NAME
 							if [ -z "$NAME" ]
 							then
-								echo "Action ABORTED.">>$HOME/commands/uberfuzz/log.txt
+								echo "Action ABORTED.">>$HOME/git/uberfuzz/log.txt
 							elif [ -f "$PWD""/""$NAME" ]
 							then
-								echo "ABORTED: Name already in use." >>$HOME/commands/uberfuzz/log.txt
+								echo "ABORTED: Name already in use." >>$HOME/git/uberfuzz/log.txt
 							else
 								touch "$NAME"
-								echo "CREATED ""$NAME"" file inside ""$PWD">>$HOME/commands/uberfuzz/log.txt
+								echo "CREATED ""$NAME"" file inside ""$PWD">>$HOME/git/uberfuzz/log.txt
 							fi
 
 						;;
 						#================= DEFINING SELECT APP function ctrl-alt-o ========================
-						"${V[_SELECT-APP_]}" )	APP="$(ls /usr/share/|fzf	--layout=reverse	 --height=100% 	--preview-window=40%:noborder --preview='Y="3";MAXW=$(("$FZF_PREVIEW_COLUMNS"/2)); MAXH=$(("$FZF_PREVIEW_COLUMNS"/2)) ;X=$(("$FZF_PREVIEW_COLUMNS"*10/6)); draw_icon $X $Y $MAXW $MAXH gnome-system.png'	--border -i --prompt="Open with: ")"
-							echo "Opened "$LINE" with "$APP""	>>$HOME/commands/uberfuzz/log.txt
+						"${V[_SELECT-APP_]}" )	APP="$(ls /usr/share/|fzf	--layout=reverse	 --height=100% 	--preview-window=40%:noborder --preview='Y="3";MAXW=$(("$FZF_PREVIEW_COLUMNS"/2)); MAXH=$(("$FZF_PREVIEW_COLUMNS"/2)) ;X=$(("$FZF_PREVIEW_COLUMNS"*10/6)); draw_icon $X $Y $MAXW $MAXH system.png'	--border -i --prompt="Open with: ")"
+							echo "Opened "$LINE" with "$APP""	>>$HOME/git/uberfuzz/log.txt
 							eval "$APP" "$LINE"
 						;;
 						#================= DEFINING MAKE NEW DIRECTORY ctrl-alt-n =========================
 						 "${V[_CREATE-N-DIR_]}" )	read -p "Enter name of new directory :" NAME
 							if [ -z "$NAME" ]
 							then
-								echo "Action ABORTED, enter valid name">>$HOME/commands/uberfuzz/log.txt
+								echo "Action ABORTED, enter valid name">>$HOME/git/uberfuzz/log.txt
 							elif [ -d "$PWD""/""$NAME" ]
 							then
-								echo "ABORTED: Name already in use.">>$HOME/commands/uberfuzz/log.txt
+								echo "ABORTED: Name already in use.">>$HOME/git/uberfuzz/log.txt
 							else
 								mkdir "$NAME"
-								echo "CREATED ""$NAME"" directory inside ""$PWD">>$HOME/commands/uberfuzz/log.txt
+								echo "CREATED ""$NAME"" directory inside ""$PWD">>$HOME/git/uberfuzz/log.txt
 							fi
 							;;
 
 
 						#================= DEFINING MOVE TO HOME Bookmark alt-1 =======================
 
-							"${V[_home_]}")cd;echo "MOVED to ""$PWD">>$HOME/commands/uberfuzz/log.txt
+							"${V[_home_]}")cd;echo "MOVED to ""$PWD">>$HOME/git/uberfuzz/log.txt
 							;;
 							#================= DEFINING MOVE TO Desktop Bookmark alt-2 ====================
-							"${V[_Desktop_]}")	cd $HOME/Desktop;	echo "MOVED to ""$PWD">>$HOME/commands/uberfuzz/log.txt
+							"${V[_Desktop_]}")	cd $HOME/Desktop;	echo "MOVED to ""$PWD">>$HOME/git/uberfuzz/log.txt
 							;;
 							#================= DEFINING MOVE TO Documents Bookmark alt-3 ==================
-							"${V[_Documents_]}") cd $HOME/Documents;echo "MOVED to ""$PWD">>$HOME/commands/uberfuzz/log.txt
+							"${V[_Documents_]}") cd $HOME/Documents;echo "MOVED to ""$PWD">>$HOME/git/uberfuzz/log.txt
 							;;
 							#================= DEFINING MOVE TO Downloads Bookmark alt-4 ==================
-							"${V[_Downloads_]}")	cd $HOME/Downloads;	echo "MOVED to ""$PWD">>$HOME/commands/uberfuzz/log.txt
+							"${V[_Downloads_]}")	cd $HOME/Downloads;	echo "MOVED to ""$PWD">>$HOME/git/uberfuzz/log.txt
 							;;
 							#================= DEFINING MOVE TO Music Bookmark alt-5 ======================
-							"${V[_Music_]}")	cd $HOME/Music;	echo "MOVED to ""$PWD">>$HOME/commands/uberfuzz/log.txt
+							"${V[_Music_]}")	cd $HOME/Music;	echo "MOVED to ""$PWD">>$HOME/git/uberfuzz/log.txt
 							;;
 							#================= DEFINING MOVE TO Pictures Bookmark alt-6 ====================
-							"${V[_Pictures_]}")	cd $HOME/Pictures;	echo "MOVED to ""$PWD">>$HOME/commands/uberfuzz/log.txt;
+							"${V[_Pictures_]}")	cd $HOME/Pictures;	echo "MOVED to ""$PWD">>$HOME/git/uberfuzz/log.txt;
 							;;
 							#================= DEFINING MOVE TO Videos Bookmark alt-7 =======================
-							"${V[_Videos_]}") cd $HOME/Videos;	echo "MOVED to ""$PWD">>$HOME/commands/uberfuzz/log.txt
+							"${V[_Videos_]}") cd $HOME/Videos;	echo "MOVED to ""$PWD">>$HOME/git/uberfuzz/log.txt
 							;;
 							#================= DEFINING MOVE TO COMMANDS Bookmark alt-8 =====================
-							"${V[_commands_]}" )	cd $HOME/commands;	echo "MOVED to ""$PWD">>$HOME/commands/uberfuzz/log.txt
+							"${V[_commands_]}" )	cd $HOME/commands;	echo "MOVED to ""$PWD">>$HOME/git/uberfuzz/log.txt
 							;;
 							#================= DEFINING MOVE TO vicky Bookmark alt-v =========================
-							"alt-v" )	cd /run/user/1000/gvfs/sftp:host=192.168.1.17,user=vicky/home/vicky;	echo "MOVED to ""$PWD">>$HOME/commands/uberfuzz/log.txt
+							"alt-v" )	cd /run/user/1000/gvfs/sftp:host=192.168.1.17,user=vicky/home/vicky;	echo "MOVED to ""$PWD">>$HOME/git/uberfuzz/log.txt
 							;;
 							#================= DEFINING MOVE TO athenoula Bookmark alt-a =====================
-							"alt-a") run /user/1000/gvfs/sftp/host:192=168.1.5.user,athenoula=home/athenoula/cd;	echo "MOVED to ""$PWD"	>>$HOME/commands/uberfuzz/log.txt
+							"alt-a") run /user/1000/gvfs/sftp/host:192=168.1.5.user,athenoula=home/athenoula/cd;	echo "MOVED to ""$PWD"	>>$HOME/git/uberfuzz/log.txt
 							;;
 							#================= DEFINING MOVE TO christakis Bookmark alt-c =====================
-							"alt-c")cd /run/user/1000/gvfs/sftp:host=192.168.1.15,user=christakis/home/christakis;	echo "MOVED to ""$PWD">>$HOME/commands/uberfuzz/log.txt
+							"alt-c")cd /run/user/1000/gvfs/sftp:host=192.168.1.15,user=christakis/home/christakis;	echo "MOVED to ""$PWD">>$HOME/git/uberfuzz/log.txt
 							;;
 							#================= DEFINING MOVE BACK Bookmark alt-b =====================
-							"${V[_back_]}" )cd -;	echo "MOVED to ""$PWD">>$HOME/commands/uberfuzz/log.txt
+							"${V[_back_]}" )cd -;	echo "MOVED to ""$PWD">>$HOME/git/uberfuzz/log.txt
 							;;
 							#================= DEFINING BROWSE TRASH FILE Bookmark alt-z ======================
-							"${V[_TRASH_]}" )	cd $HOME/.local/share/Trash/files/;	echo "MOVED to ""$PWD">>$HOME/commands/uberfuzz/log.txt
+							"${V[_TRASH_]}" )	cd $HOME/.local/share/Trash/files/;	echo "MOVED to ""$PWD">>$HOME/git/uberfuzz/log.txt
 							;;
 							#=================	DEFINING THEME function ctrl-t ===================================
 						"${V[_THEME_]}")	T="";
 						while [ "$T" != "Exit" ]
 						do
-							T="$(cat $HOME/.config/uberfuzz/themes.txt | awk '{print $1}'|fzf	--layout=reverse	 --height=100% 	--preview-window=40%:noborder --preview='Y="3";MAXW=$(("$FZF_PREVIEW_COLUMNS"/2)); MAXH=$(("$FZF_PREVIEW_COLUMNS"/2)) ;X=$(("$FZF_PREVIEW_COLUMNS"*10/6));  draw_icon $X $Y $MAXW $MAXH gnome-graphics.png'	--border -i --prompt="Select Theme: ")"
+							T="$(cat $HOME/.config/uberfuzz/themes.txt | awk '{print $1}'|fzf	--layout=reverse	 --height=100% 	--preview-window=40%:noborder --preview='Y="3";MAXW=$(("$FZF_PREVIEW_COLUMNS"/2)); MAXH=$(("$FZF_PREVIEW_COLUMNS"/2)) ;X=$(("$FZF_PREVIEW_COLUMNS"*10/6));  draw_icon $X $Y $MAXW $MAXH graphics.png'	--border -i --prompt="Select Theme: ")"
 							TC="$(grep "$T" $HOME/.config/uberfuzz/themes.txt|sed 's/^.*  //')"
 							if [ "$T" != "Exit" ]
 							then
 								export FZF_DEFAULT_OPTS="$TC"
-								echo "Selected Theme: "$T"">>$HOME/commands/uberfuzz/log.txt
-								echo "$FZF_DEFAULT_OPTS">$HOME/commands/uberfuzz/current_theme.txt
+								echo "Selected Theme: "$T"">>$HOME/.config/uberfuzz/log.txt
+								echo "$FZF_DEFAULT_OPTS">$HOME/.config/uberfuzz/current_theme.txt
 								#define background color for gnome-terminal
-								BACKGROUNDCOLOR="$(cat $HOME/commands/uberfuzz/current_theme.txt|sed 's/^.*,bg://;s/,.*$//')"
-								#FOREGROUNDCOLOR="$(cat $HOME/commands/uberfuzz/current_theme.txt|sed 's/^.*,fg://;s/,.*$//')"
+								BACKGROUNDCOLOR="$(cat $HOME/.config/uberfuzz/current_theme.txt|sed 's/^.*,bg://;s/,.*$//')"
+								#FOREGROUNDCOLOR="$(cat $HOME/.config/uberfuzz/current_theme.txt|sed 's/^.*,fg://;s/,.*$//')"
 								#kitty @ set-colors background="$BACKGROUNDCOLOR"	#foreground="$FOREGROUNDCOLOR"
 
 							fi
 						done
 						;;
 				#================= DEFINING Going Back one step Keybinding left ===================
-				"left" )	cd ..;	echo "MOVED to ""$PWD">>$HOME/commands/uberfuzz/log.txt
+				"left" )	cd ..;	echo "MOVED to ""$PWD">>$HOME/git/uberfuzz/log.txt
 				;;
 				#================= DEFINING SHELL  space ==========================================
 				"${V[_OPENTERMINAL_]}" )	finalise&&gnome-terminal  --wait --working-directory="$PWD"

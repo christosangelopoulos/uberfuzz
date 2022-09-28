@@ -1,7 +1,7 @@
 #! /bin/bash
 
 
-touch    COPYNAME.txt COPY.txt CUT.txt log.txt  P.txt PP.txt  current_theme.txt
+touch    COPYNAME.txt COPY.txt CUT.txt log.txt  P.txt PP.txt
 audio_shortcuts="┌─────────────────────────────────────────────┐
 │           MPLAYER AUDIO SHORTCUTS           │
 ├───────────┬─────────────────────────────────┤
@@ -40,7 +40,7 @@ video_shortcuts="┌────────────────────
 
 
 mkdir -p $HOME/.cache/uberfuzz/icons $HOME/.cache/uberfuzz/prefer $HOME/.cache/uberfuzz/thumbnails $HOME/.config/uberfuzz/
-touch $HOME/.config/uberfuzz/themes.txt $HOME/.config/uberfuzz/uberfuzz.conf $HOME/.config/uberfuzz/audio_shortcuts.txt $HOME/.config/uberfuzz/video_shortcuts.txt
+touch $HOME/.config/uberfuzz/themes.txt $HOME/.config/uberfuzz/uberfuzz.conf $HOME/.config/uberfuzz/audio_shortcuts.txt $HOME/.config/uberfuzz/video_shortcuts.txt $HOME/.config/uberfuzz/current_theme.txt
 themes="Exit
 No_Theme
 Nordisk  --color=fg:#D8DEE9,bg:#2E3440,hl:#6c6c6c,fg+:#D8DEE9,bg+:#434C5E,hl+:#A3BE8C,pointer:#BF616A,info:#4C566A,spinner:#4C566A,header:#DCD81F,prompt:#81A1C1,marker:#EBCB8B
