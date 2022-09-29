@@ -138,7 +138,7 @@ cd
 	-m \
 	-i \
 	--exact \
-	--expect=ctrl-o,ctrl-alt-o,ctrl-c,ctrl-v,ctrl-x,ctrl-d,ctrl-r,ctrl-z,alt-z,left,ctrl-h,ctrl-y,ctrl-u,alt-1,alt-2,alt-3,alt-4,alt-5,alt-6,alt-7,alt-8,alt-a,alt-v,alt-c,alt-b,ctrl-n,ctrl-alt-n,space,ctrl-t \
+	--expect=ctrl-o,ctrl-alt-o,ctrl-c,ctrl-v,ctrl-x,ctrl-d,ctrl-r,ctrl-z,alt-z,left,ctrl-h,ctrl-y,ctrl-u,alt-1,alt-2,alt-3,alt-4,alt-5,alt-6,alt-7,alt-8,alt-9,alt-a,alt-v,alt-c,alt-b,ctrl-n,ctrl-alt-n,space,ctrl-t \
 	--preview='if [ "$FZF_PREVIEW_LINES" -ge 20 ] ; then LOGLINES=3 ; else LOGLINES=1; fi \
 	;if [[ "$FZF_PREVIEW_COLUMNS" -ge 77 ]] \
 	;then  X="$(( (( "$FZF_PREVIEW_COLUMNS" * 7/10 )) - (( "$FZF_PREVIEW_COLUMNS" * 3/10 )) + 50 ))";Y="3";MAXW=$((34 + (($X - 80))*2));MAXH=$(( "$FZF_PREVIEW_LINES" -3 ));fi \
@@ -626,6 +626,9 @@ cd
 							;;
 							#================= DEFINING MOVE TO COMMANDS Bookmark alt-8 =====================
 							"${V[_commands_]}" )	cd $HOME/commands;	echo "MOVED to ""$PWD">>$HOME/git/uberfuzz/log.txt
+							;;
+							#================= DEFINING MOVE TO added hd Bookmark alt-9 =====================
+							"${V[_extrahd_]}" )	cd /media/christos/d2ae4585-ca9c-4f76-bd88-f0c79a7ca977;	echo "MOVED to ""$PWD">>$HOME/git/uberfuzz/log.txt
 							;;
 							#================= DEFINING MOVE TO vicky Bookmark alt-v =========================
 							"alt-v" )	cd /run/user/1000/gvfs/sftp:host=192.168.1.17,user=vicky/home/vicky;	echo "MOVED to ""$PWD">>$HOME/git/uberfuzz/log.txt

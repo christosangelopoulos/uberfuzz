@@ -1152,3 +1152,23 @@ Welcome to the FuzzyFinder File Manager
 Need Help? Press ctrl - h
 Opened .bash_history with 
 Opened Bookmarks.txt with 
+Thursday 29 September 10:47:52
+Welcome to the FuzzyFinder File Manager
+Need Help? Press ctrl - h
+MOVED to /home/christos/Music
+MOVED to /home/christos/commands
+MOVED to /home/christos/commands
+MOVED to /home/christos
+MOVED to /home/christos/.config
+MOVED to /home/christos/.config/uberfuzz
+Opened uberfuzz.conf with xed
+MOVED to /home/christos
+MOVED to /home
+MOVED to /
+MOVED to /media
+MOVED to /media/christos
+MOVED to /media/christos/d2ae4585-ca9c-4f76-bd88-f0c79a7ca977
+Thursday 29 September 10:55:59
+Welcome to the FuzzyFinder File Manager
+Need Help? Press ctrl - h
+MOVED to /media/christos/d2ae4585-ca9c-4f76-bd88-f0c79a7ca977
